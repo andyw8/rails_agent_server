@@ -90,8 +90,8 @@ module RailsAgentServer
         handle_client(client)
       end
     rescue => e
-      $stderr.puts "Server error: #{e.class}: #{e.message}"
-      $stderr.puts e.backtrace.join("\n")
+      warn "Server error: #{e.class}: #{e.message}"
+      warn e.backtrace.join("\n")
       cleanup_files
       raise
     end

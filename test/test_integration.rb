@@ -7,7 +7,7 @@ require "socket"
 
 class TestIntegration < Minitest::Test
   def setup
-    skip "Skipping integration tests with forked processes in CI" if ENV['CI']
+    skip "Skipping integration tests with forked processes in CI" if ENV["CI"]
     @temp_dir = Dir.mktmpdir
     @socket_path = File.join(@temp_dir, "test_rails_agent.sock")
     @pid_path = File.join(@temp_dir, "test_rails_agent.pid")
@@ -190,9 +190,9 @@ class TestIntegration < Minitest::Test
     # This doesn't require Rails, just Ruby eval
     pid = fork do
       # Close inherited file descriptors
-      STDIN.close
-      STDOUT.reopen(@log_path, "a")
-      STDERR.reopen(@log_path, "a")
+      $stdin.close
+      $stdout.reopen(@log_path, "a")
+      $stderr.reopen(@log_path, "a")
 
       FileUtils.rm_f(@socket_path)
       server = UNIXServer.new(@socket_path)
@@ -217,7 +217,7 @@ class TestIntegration < Minitest::Test
         begin
           old_stdout = $stdout
           $stdout = output
-          result = eval(code, TOPLEVEL_BINDING)
+          result = eval(code, TOPLEVEL_BINDING) # rubocop:disable Security/Eval
           $stdout = old_stdout
         rescue => e
           $stdout = old_stdout

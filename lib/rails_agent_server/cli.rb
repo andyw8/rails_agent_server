@@ -39,7 +39,7 @@ module RailsAgentServer
       end
 
       if code.empty?
-        $stderr.puts "Error: No code provided"
+        warn "Error: No code provided"
         print_help
         exit 1
       end
@@ -47,10 +47,10 @@ module RailsAgentServer
       begin
         puts server.execute(code)
       rescue Errno::ENOENT
-        $stderr.puts "Error: Could not connect to Rails agent server"
+        warn "Error: Could not connect to Rails agent server"
         exit 1
       rescue => e
-        $stderr.puts "Error: #{e.message}"
+        warn "Error: #{e.message}"
         exit 1
       end
     end
