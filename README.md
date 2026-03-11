@@ -1,10 +1,10 @@
 # Rails Agent Server
 
-A persistent Rails server for AI agents that avoids boot overhead for repeated queries. Intended for AI agents like Claude Code that need fast Rails console access without waiting for Rails to boot on every request.
+A persistent Rails server for AI agents that avoids boot overhead for repeated queries. Intended for AI agents like Claude Code that need fast Rails runner access without waiting for Rails to boot on every request.
 
 ## Why This Gem?
 
-When using AI coding assistants or automation tools with Rails applications, the agent often needs to run many small queries to understand the runtime behaviour or state. Using `bin/rails runner` for each query means booting Rails every time, which can typically take 5-10 seconds per query.
+When using AI coding assistants or automation tools with Rails applications, the agent often needs to run many small queries via `bin/rails runner` to understand the runtime behaviour or state. Using `bin/rails runner` for each query means booting Rails every time, which can typically take 5-10 seconds per query.
 
 Rails Agent Server starts a persistent background server that keeps Rails loaded in memory. The first request takes the normal Rails boot time, but subsequent requests are instant.
 
@@ -68,7 +68,7 @@ Add this section to your project's `CLAUDE.md` or equivalent:
 ```markdown
 ## Rails Console Access
 
-This project uses `rails_agent_server` for fast Rails console access without boot overhead.
+This project uses `rails_agent_server` for fast Rails runner access without boot overhead.
 
 When you need to query the database or run Rails code:
 - Use `rails_agent_server 'YourCode.here'` instead of `bin/rails runner`
@@ -125,7 +125,7 @@ rails_agent_server 'Rails.cache.clear; "Cache cleared"'
 
 ## How It Works
 
-1. **First Request**: When you run `rails_agent` for the first time, it:
+1. **First Request**: When you run `rails_agent_server` for the first time, it:
    - Spawns a background server process
    - Loads your Rails environment once
    - Creates a Unix socket for communication
@@ -147,9 +147,9 @@ rails_agent_server 'Rails.cache.clear; "Cache cleared"'
 
 By default, the server creates these files in your Rails application:
 
-- **Socket**: `tmp/rails_agent.sock` - Unix socket for communication
-- **PID file**: `tmp/pids/rails_agent.pid` - Process ID for management
-- **Log file**: `log/rails_agent.log` - Server output and errors
+- **Socket**: `tmp/rails_agent_server.sock` - Unix socket for communication
+- **PID file**: `tmp/pids/rails_agent_server.pid` - Process ID for management
+- **Log file**: `log/rails_agent_server.log` - Server output and errors
 
 If not in a Rails directory, files are created in `/tmp/`.
 

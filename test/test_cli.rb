@@ -32,7 +32,7 @@ class TestCLI < Minitest::Test
     output = $stdout.string
     assert_includes output, "Rails Agent Server"
     assert_includes output, "Usage:"
-    assert_includes output, "rails_agent 'User.count'"
+    assert_includes output, "rails_agent_server 'User.count'"
   end
 
   def test_dash_h_shows_help

@@ -111,25 +111,25 @@ module RailsAgentServer
 
     def default_socket_path
       if defined?(Rails) && Rails.root
-        Rails.root.join("tmp", "rails_agent.sock").to_s
+        Rails.root.join("tmp", "rails_agent_server.sock").to_s
       else
-        "/tmp/rails_agent.sock"
+        "/tmp/rails_agent_server.sock"
       end
     end
 
     def default_pid_path
       if defined?(Rails) && Rails.root
-        Rails.root.join("tmp", "pids", "rails_agent.pid").to_s
+        Rails.root.join("tmp", "pids", "rails_agent_server.pid").to_s
       else
-        "/tmp/rails_agent.pid"
+        "/tmp/rails_agent_server.pid"
       end
     end
 
     def default_log_path
       if defined?(Rails) && Rails.root
-        Rails.root.join("log", "rails_agent.log").to_s
+        Rails.root.join("log", "rails_agent_server.log").to_s
       else
-        "/tmp/rails_agent.log"
+        "/tmp/rails_agent_server.log"
       end
     end
 
