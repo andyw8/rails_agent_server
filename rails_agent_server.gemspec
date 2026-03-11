@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["andyw8@users.noreply.github.com"]
 
   spec.summary = "A persistent Rails server for AI agents that avoids boot overhead for repeated queries"
-  spec.description = "Rails Agent Server provides a persistent background server for running Rails code without the overhead of booting Rails for each request. Perfect for AI agents and automation tools that need fast Rails console access."
+  spec.description = "Rails Agent Server provides a persistent background server for running Rails code without the overhead of booting Rails for each request. Perfect for AI agents that need fast Rails console access."
   spec.homepage = "https://github.com/andyw8/rails_agent_server"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2.0"
