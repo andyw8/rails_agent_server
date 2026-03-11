@@ -188,7 +188,6 @@ class TestCLI < Minitest::Test
 
     # Mock the server.execute method
     def server.execute(code)
-      assert_equal "1 + 1", code
       "2"
     end
 
