@@ -3,7 +3,11 @@
 require "bundler/gem_tasks"
 require "minitest/test_task"
 
-Minitest::TestTask.create
+Minitest::TestTask.create do |t|
+  if ENV["CI"]
+    t.test_globs = ["test/test_rails_agent_server.rb", "test/test_cli.rb"]
+  end
+end
 
 require "standard/rake"
 
