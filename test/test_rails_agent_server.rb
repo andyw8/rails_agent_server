@@ -48,9 +48,9 @@ class TestRailsAgentServer < Minitest::Test
 
   def test_default_paths_when_not_in_rails
     server = RailsAgentServer::Server.new
-    assert_equal "/tmp/rails_agent.sock", server.socket_path
-    assert_equal "/tmp/rails_agent.pid", server.pid_path
-    assert_equal "/tmp/rails_agent.log", server.log_path
+    assert_equal "/tmp/rails_agent_server.sock", server.socket_path
+    assert_equal "/tmp/rails_agent_server.pid", server.pid_path
+    assert_equal "/tmp/rails_agent_server.log", server.log_path
   end
 
   def test_running_returns_false_with_stale_pid_file
@@ -160,7 +160,7 @@ class TestRailsAgentServer < Minitest::Test
 
     begin
       server = RailsAgentServer::Server.new
-      assert_equal "/fake/rails/root/tmp/rails_agent.sock", server.socket_path
+      assert_equal "/fake/rails/root/tmp/rails_agent_server.sock", server.socket_path
     ensure
       Object.send(:remove_const, :Rails)
     end
@@ -178,7 +178,7 @@ class TestRailsAgentServer < Minitest::Test
 
     begin
       server = RailsAgentServer::Server.new
-      assert_equal "/fake/rails/root/tmp/pids/rails_agent.pid", server.pid_path
+      assert_equal "/fake/rails/root/tmp/pids/rails_agent_server.pid", server.pid_path
     ensure
       Object.send(:remove_const, :Rails)
     end
@@ -196,7 +196,7 @@ class TestRailsAgentServer < Minitest::Test
 
     begin
       server = RailsAgentServer::Server.new
-      assert_equal "/fake/rails/root/log/rails_agent.log", server.log_path
+      assert_equal "/fake/rails/root/log/rails_agent_server.log", server.log_path
     ensure
       Object.send(:remove_const, :Rails)
     end
