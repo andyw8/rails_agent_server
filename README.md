@@ -67,7 +67,7 @@ And then execute:
 bundle install
 ```
 
-**Note:** The gem works either way. Global installation is simpler for AI agents since they don't need to modify your Gemfile.
+
 
 ## Agent Setup
 
