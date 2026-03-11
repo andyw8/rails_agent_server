@@ -19,9 +19,6 @@ module RailsAgentServer
         server.restart
       when "status"
         server.status
-      when "start"
-        server.start
-        puts "Rails agent server started"
       when "--help", "-h", nil
         print_help
       else
@@ -62,7 +59,6 @@ module RailsAgentServer
         Usage:
           rails_agent_server 'User.count'              # Run a Ruby expression
           rails_agent_server /path/to/script.rb        # Run a script file
-          rails_agent_server start                     # Start the server
           rails_agent_server stop                      # Stop the server
           rails_agent_server restart                   # Restart the server
           rails_agent_server status                    # Check server status

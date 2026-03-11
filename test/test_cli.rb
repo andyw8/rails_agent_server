@@ -102,26 +102,6 @@ class TestCLI < Minitest::Test
     assert_kind_of RailsAgentServer::Server, cli.server
   end
 
-  def test_start_command
-    cli = RailsAgentServer::CLI.new(["start"])
-    server = RailsAgentServer::Server.new(
-      socket_path: @socket_path,
-      pid_path: @pid_path,
-      log_path: @log_path
-    )
-    cli.instance_variable_set(:@server, server)
-
-    # Mock the server.start method to avoid actually starting
-    def server.start
-      # Do nothing
-    end
-
-    cli.run
-
-    output = $stdout.string
-    assert_includes output, "started"
-  end
-
   def test_help_includes_examples
     cli = RailsAgentServer::CLI.new(["--help"])
     cli.run
@@ -137,7 +117,6 @@ class TestCLI < Minitest::Test
     cli.run
 
     output = $stdout.string
-    assert_includes output, "start"
     assert_includes output, "stop"
     assert_includes output, "restart"
     assert_includes output, "status"
