@@ -81,7 +81,7 @@ When you need to query the database or run Rails code:
 - First request auto-starts a persistent server (takes ~5 seconds)
 - Subsequent requests are almost instant (no Rails boot time)
 - Server stays running in background until you run `rails_agent_server stop`
-- **Important**: Unlike `bin/rails runner`, this is stateful - instance variables and state persist between requests (like `bin/rails console`)
+- **Important**: Unlike `bin/rails runner`, this is stateful - variables and state persist between requests (like `bin/rails console`)
 
 Examples:
   rails_agent_server 'puts User.count'
