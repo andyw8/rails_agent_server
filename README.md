@@ -163,7 +163,7 @@ If not in a Rails directory, files are created in `/tmp/`.
 ## Performance
 
 - **First request**: ~5-10 seconds (Rails boot time)
-- **Subsequent requests**: ~50-200ms (no boot overhead)
+- **Subsequent requests**: Almost instant (no boot overhead)
 - **Memory**: One Rails process running in background (~200-500MB depending on your app)
 
 ## When to Restart
