@@ -25,16 +25,6 @@ class TestCLI < Minitest::Test
     FileUtils.rm_rf(@temp_dir) if @temp_dir && File.exist?(@temp_dir)
   end
 
-  def test_help_command
-    cli = RailsAgentServer::CLI.new(["help"])
-    cli.run
-
-    output = $stdout.string
-    assert_includes output, "Rails Agent Server"
-    assert_includes output, "Usage:"
-    assert_includes output, "rails_agent_server 'User.count'"
-  end
-
   def test_dash_h_shows_help
     cli = RailsAgentServer::CLI.new(["-h"])
     cli.run
@@ -133,7 +123,7 @@ class TestCLI < Minitest::Test
   end
 
   def test_help_includes_examples
-    cli = RailsAgentServer::CLI.new(["help"])
+    cli = RailsAgentServer::CLI.new(["--help"])
     cli.run
 
     output = $stdout.string
@@ -143,7 +133,7 @@ class TestCLI < Minitest::Test
   end
 
   def test_help_includes_all_commands
-    cli = RailsAgentServer::CLI.new(["help"])
+    cli = RailsAgentServer::CLI.new(["--help"])
     cli.run
 
     output = $stdout.string

@@ -22,7 +22,7 @@ module RailsAgentServer
       when "start"
         server.start
         puts "Rails agent server started"
-      when "--help", "-h", "help", nil
+      when "--help", "-h", nil
         print_help
       else
         execute_code
@@ -66,7 +66,6 @@ module RailsAgentServer
           rails_agent_server stop                      # Stop the server
           rails_agent_server restart                   # Restart the server
           rails_agent_server status                    # Check server status
-          rails_agent_server help                      # Show this help
 
         The server auto-starts on first use if not already running.
 

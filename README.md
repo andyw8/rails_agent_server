@@ -113,7 +113,6 @@ rails_agent_server status                    # Check if server is running
 rails_agent_server start                     # Manually start the server
 rails_agent_server stop                      # Stop the background server
 rails_agent_server restart                   # Restart the background server
-rails_agent_server help                      # Show help
 ```
 
 ### Examples
