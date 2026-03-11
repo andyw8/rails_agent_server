@@ -4,7 +4,7 @@ A persistent Rails server for AI agents that avoids boot overhead for repeated q
 
 ## Why This Gem?
 
-When using AI coding assistants or automation tools with Rails applications, the agent often needs to run many small queries to understand the schema, query data, or test code. Using `bin/rails runner` for each query means booting Rails every time, which can typically take 5-10 seconds per query.
+When using AI coding assistants or automation tools with Rails applications, the agent often needs to run many small queries to understand the runtime behaviour or state. Using `bin/rails runner` for each query means booting Rails every time, which can typically take 5-10 seconds per query.
 
 Rails Agent Server starts a persistent background server that keeps Rails loaded in memory. The first request takes the normal Rails boot time, but subsequent requests are instant.
 
@@ -61,6 +61,27 @@ Or install it yourself as:
 gem install rails_agent_server
 ```
 
+## Agent Setup
+
+Add this section to your project's `CLAUDE.md` or equivalent:
+
+```markdown
+## Rails Console Access
+
+This project uses `rails_agent_server` for fast Rails console access without boot overhead.
+
+When you need to query the database or run Rails code:
+- Use `rails_agent_server 'YourCode.here'` instead of `bin/rails runner`
+- First request auto-starts a persistent server (takes ~5 seconds)
+- Subsequent requests are instant (no Rails boot time)
+- Server stays running in background until you run `rails_agent_server stop`
+
+Examples:
+  rails_agent_server 'User.count'
+  rails_agent_server 'Post.where(published: true).count'
+  rails_agent_server 'User.find_by(email: "test@example.com")&.name'
+```
+
 ## Usage
 
 ### Basic Commands
@@ -69,58 +90,37 @@ These commands are designed to be used by AI agents (like Claude Code) or automa
 
 ```bash
 # Run a Ruby expression (auto-starts server if needed)
-rails_agent 'User.count'
+rails_agent_server 'User.count'
 
 # Run code that prints output
-rails_agent 'puts User.pluck(:email).join(", ")'
+rails_agent_server 'puts User.pluck(:email).join(", ")'
 
 # Run a script file
-rails_agent /path/to/script.rb
+rails_agent_server /path/to/script.rb
 
 # Server management
-rails_agent status                    # Check if server is running
-rails_agent start                     # Manually start the server
-rails_agent stop                      # Stop the background server
-rails_agent restart                   # Restart the background server
-rails_agent help                      # Show help
+rails_agent_server status                    # Check if server is running
+rails_agent_server start                     # Manually start the server
+rails_agent_server stop                      # Stop the background server
+rails_agent_server restart                   # Restart the background server
+rails_agent_server help                      # Show help
 ```
 
 ### Examples
 
 ```bash
 # Database queries
-rails_agent 'User.count'
-rails_agent 'Post.where(published: true).pluck(:title)'
-rails_agent 'User.find_by(email: "test@example.com")&.name'
+rails_agent_server 'User.count'
+rails_agent_server 'Post.where(published: true).pluck(:title)'
+rails_agent_server 'User.find_by(email: "test@example.com")&.name'
 
 # Inspect schema
-rails_agent 'ActiveRecord::Base.connection.tables'
-rails_agent 'User.column_names'
+rails_agent_server 'ActiveRecord::Base.connection.tables'
+rails_agent_server 'User.column_names'
 
 # Complex operations
-rails_agent 'User.group(:status).count'
-rails_agent 'Rails.cache.clear; "Cache cleared"'
-```
-
-## For AI Agents (Claude Code)
-
-Add this section to your project's `CLAUDE.md` or equivalent:
-
-```markdown
-## Rails Console Access
-
-This project uses `rails_agent` for fast Rails console access without boot overhead.
-
-When you need to query the database or run Rails code:
-- Use `rails_agent 'YourCode.here'` instead of `bin/rails runner`
-- First request auto-starts a persistent server (takes ~5 seconds)
-- Subsequent requests are instant (no Rails boot time)
-- Server stays running in background until you run `rails_agent stop`
-
-Examples:
-  rails_agent 'User.count'
-  rails_agent 'Post.where(published: true).count'
-  rails_agent 'User.find_by(email: "test@example.com")&.name'
+rails_agent_server 'User.group(:status).count'
+rails_agent_server 'Rails.cache.clear; "Cache cleared"'
 ```
 
 ## How It Works
@@ -168,7 +168,7 @@ You should restart the server when:
 - The server is returning stale data
 
 ```bash
-rails_agent restart
+rails_agent_server restart
 ```
 
 ## Limitations

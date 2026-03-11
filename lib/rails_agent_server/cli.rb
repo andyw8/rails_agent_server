@@ -60,38 +60,38 @@ module RailsAgentServer
         Rails Agent Server - A persistent Rails server for AI agents
 
         Usage:
-          rails_agent 'User.count'              # Run a Ruby expression
-          rails_agent /path/to/script.rb        # Run a script file
-          rails_agent start                     # Start the server
-          rails_agent stop                      # Stop the server
-          rails_agent restart                   # Restart the server
-          rails_agent status                    # Check server status
-          rails_agent help                      # Show this help
+          rails_agent_server 'User.count'              # Run a Ruby expression
+          rails_agent_server /path/to/script.rb        # Run a script file
+          rails_agent_server start                     # Start the server
+          rails_agent_server stop                      # Stop the server
+          rails_agent_server restart                   # Restart the server
+          rails_agent_server status                    # Check server status
+          rails_agent_server help                      # Show this help
 
         The server auto-starts on first use if not already running.
 
         Examples:
-          rails_agent 'User.count'
-          rails_agent 'puts User.pluck(:email).join(", ")'
-          rails_agent 'ActiveRecord::Base.connection.tables'
-          rails_agent script.rb
+          rails_agent_server 'User.count'
+          rails_agent_server 'puts User.pluck(:email).join(", ")'
+          rails_agent_server 'ActiveRecord::Base.connection.tables'
+          rails_agent_server script.rb
 
         For Claude Code or AI agents, add this to your CLAUDE.md:
 
           ## Rails Console Access
 
-          This project uses rails_agent for fast Rails console access without boot overhead.
+          This project uses rails_agent_server for fast Rails console access without boot overhead.
 
           When you need to query the database or run Rails code:
-          - Use `rails_agent 'YourCode.here'` instead of `bin/rails runner`
+          - Use `rails_agent_server 'YourCode.here'` instead of `bin/rails runner`
           - First request auto-starts a persistent server (takes ~5 seconds)
           - Subsequent requests are instant (no Rails boot time)
-          - Server stays running in background until you run `rails_agent stop`
+          - Server stays running in background until you run `rails_agent_server stop`
 
           Examples:
-            rails_agent 'User.count'
-            rails_agent 'Post.where(published: true).count'
-            rails_agent 'User.find_by(email: "test@example.com")&.name'
+            rails_agent_server 'User.count'
+            rails_agent_server 'Post.where(published: true).count'
+            rails_agent_server 'User.find_by(email: "test@example.com")&.name'
       HELP
     end
   end
