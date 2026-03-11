@@ -6,7 +6,7 @@ A persistent Rails server for AI agents that avoids boot overhead for repeated q
 
 When using AI coding assistants or automation tools with Rails applications, the agent often needs to run many small queries via `bin/rails runner` to understand the runtime behaviour or state. Using `bin/rails runner` for each query means booting Rails every time, which can typically take 5-10 seconds per query.
 
-Rails Agent Server starts a persistent background server that keeps Rails loaded in memory. The first request takes the normal Rails boot time, but subsequent requests are instant.
+Rails Agent Server starts a persistent background server that keeps Rails loaded in memory. The first request takes the normal Rails boot time, but subsequent requests are almost instant.
 
 ### Why Not `bin/rails console`?
 
@@ -81,7 +81,7 @@ This project uses `rails_agent_server` for fast Rails runner access without boot
 When you need to query the database or run Rails code:
 - Use `rails_agent_server 'YourCode.here'` instead of `bin/rails runner`
 - First request auto-starts a persistent server (takes ~5 seconds)
-- Subsequent requests are instant (no Rails boot time)
+- Subsequent requests are almost instant (no Rails boot time)
 - Server stays running in background until you run `rails_agent_server stop`
 
 Examples:
