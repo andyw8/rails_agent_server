@@ -41,6 +41,8 @@ gem install rails_repl_server
 
 ### Basic Commands
 
+These commands are designed to be used by AI agents (like Claude Code) or automation tools, though they work equally well for manual use.
+
 ```bash
 # Run a Ruby expression (auto-starts server if needed)
 rails_repl 'User.count'
