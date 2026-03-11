@@ -19,14 +19,17 @@ module RailsAgentServer
 
       puts "Starting Rails agent server (this will take a few seconds)..."
 
+      # Build load path argument to ensure spawned process uses same gem version
+      load_path_args = $LOAD_PATH.map { |path| ["-I", path] }.flatten
+
       pid = spawn(
-        RbConfig.ruby, "-r", "rails_agent_server/server",
+        RbConfig.ruby, *load_path_args, "-r", "rails_agent_server/server",
         "-e", "RailsAgentServer::Server.new(socket_path: '#{socket_path}', pid_path: '#{pid_path}', log_path: '#{log_path}').run",
         out: log_path, err: log_path
       )
       Process.detach(pid)
 
-      wait_for_server
+      wait_for_server(pid)
     end
 
     def stop
@@ -133,9 +136,23 @@ module RailsAgentServer
       end
     end
 
-    def wait_for_server(timeout: 30)
+    def wait_for_server(pid, timeout: 30)
       (timeout * 2).times do
         return if File.exist?(socket_path)
+
+        # Check if process is still alive
+        begin
+          Process.kill(0, pid)
+        rescue Errno::ESRCH
+          # Process died - show error from log
+          if File.exist?(log_path)
+            error_msg = File.read(log_path).strip
+            abort "Rails agent server failed to start: #{error_msg}"
+          else
+            abort "Rails agent server failed to start (no log file found)"
+          end
+        end
+
         sleep 0.5
       end
 
