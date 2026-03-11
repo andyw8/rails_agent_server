@@ -87,7 +87,7 @@ module RailsAgentServer
 
           Reloading code changes:
           - For most changes: `rails_agent_server 'Rails.application.reloader.reload!'`
-          - For initializer changes: stop the server with `rails_agent_server stop` (it will auto-start on next request)
+          - For initializer changes: `rails_agent_server stop` (auto-starts on next request)
       HELP
     end
   end

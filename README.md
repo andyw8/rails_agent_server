@@ -89,7 +89,7 @@ Examples:
 
 Reloading code changes:
 - For most changes: `rails_agent_server 'Rails.application.reloader.reload!'`
-- For initializer changes: stop the server with `rails_agent_server stop` (it will auto-start on next request)
+- For initializer changes: `rails_agent_server stop` (auto-starts on next request)
 
 Note: Use `bundle exec rails_agent_server` if the gem is in your Gemfile, or just `rails_agent_server` if installed globally.
 ```
@@ -169,8 +169,8 @@ If not in a Rails directory, files are created in `/tmp/`.
 
 ## Limitations
 
-- Some changes (like initializers) require stopping the server and letting it auto-start on next request
 - Most code changes can be reloaded with `Rails.application.reloader.reload!`
+- Initializer changes require stopping the server (`rails_agent_server stop`)
 - Only one server runs per Rails application (shared socket file)
 - Requires Unix sockets (macOS, Linux, WSL)
 
