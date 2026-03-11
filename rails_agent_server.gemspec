@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require_relative "lib/rails_repl_server/version"
+require_relative "lib/rails_agent_server/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "rails_repl_server"
-  spec.version = RailsReplServer::VERSION
+  spec.name = "rails_agent_server"
+  spec.version = RailsAgentServer::VERSION
   spec.authors = ["Andy Waite"]
   spec.email = ["andyw8@users.noreply.github.com"]
 
-  spec.summary = "A persistent Rails REPL server that avoids boot overhead for repeated queries"
-  spec.description = "Rails REPL Server provides a persistent background server for running Rails code without the overhead of booting Rails for each request. Perfect for AI agents and automation tools that need fast Rails console access."
-  spec.homepage = "https://github.com/andyw8/rails_repl_server"
+  spec.summary = "A persistent Rails server for AI agents that avoids boot overhead for repeated queries"
+  spec.description = "Rails Agent Server provides a persistent background server for running Rails code without the overhead of booting Rails for each request. Perfect for AI agents and automation tools that need fast Rails console access."
+  spec.homepage = "https://github.com/andyw8/rails_agent_server"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/andyw8/rails_repl_server"
+  spec.metadata["source_code_uri"] = "https://github.com/andyw8/rails_agent_server"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.

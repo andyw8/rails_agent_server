@@ -1,6 +1,0 @@
-#!/usr/bin/env ruby
-# frozen_string_literal: true
-
-require "rails_repl_server"
-
-RailsReplServer::CLI.new(ARGV).run

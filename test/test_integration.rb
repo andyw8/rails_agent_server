@@ -8,11 +8,11 @@ require "socket"
 class TestIntegration < Minitest::Test
   def setup
     @temp_dir = Dir.mktmpdir
-    @socket_path = File.join(@temp_dir, "test_rails_repl.sock")
-    @pid_path = File.join(@temp_dir, "test_rails_repl.pid")
-    @log_path = File.join(@temp_dir, "test_rails_repl.log")
+    @socket_path = File.join(@temp_dir, "test_rails_agent.sock")
+    @pid_path = File.join(@temp_dir, "test_rails_agent.pid")
+    @log_path = File.join(@temp_dir, "test_rails_agent.log")
 
-    @server = RailsReplServer::Server.new(
+    @server = RailsAgentServer::Server.new(
       socket_path: @socket_path,
       pid_path: @pid_path,
       log_path: @log_path

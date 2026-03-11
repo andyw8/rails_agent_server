@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "rails_agent_server"
+
+RailsAgentServer::CLI.new(ARGV).run

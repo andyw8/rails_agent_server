@@ -8,9 +8,9 @@ require "stringio"
 class TestCLI < Minitest::Test
   def setup
     @temp_dir = Dir.mktmpdir
-    @socket_path = File.join(@temp_dir, "test_rails_repl.sock")
-    @pid_path = File.join(@temp_dir, "test_rails_repl.pid")
-    @log_path = File.join(@temp_dir, "test_rails_repl.log")
+    @socket_path = File.join(@temp_dir, "test_rails_agent.sock")
+    @pid_path = File.join(@temp_dir, "test_rails_agent.pid")
+    @log_path = File.join(@temp_dir, "test_rails_agent.log")
 
     @original_stdout = $stdout
     @original_stderr = $stderr
@@ -26,42 +26,42 @@ class TestCLI < Minitest::Test
   end
 
   def test_help_command
-    cli = RailsReplServer::CLI.new(["help"])
+    cli = RailsAgentServer::CLI.new(["help"])
     cli.run
 
     output = $stdout.string
-    assert_includes output, "Rails REPL Server"
+    assert_includes output, "Rails Agent Server"
     assert_includes output, "Usage:"
-    assert_includes output, "rails_repl 'User.count'"
+    assert_includes output, "rails_agent 'User.count'"
   end
 
   def test_dash_h_shows_help
-    cli = RailsReplServer::CLI.new(["-h"])
+    cli = RailsAgentServer::CLI.new(["-h"])
     cli.run
 
     output = $stdout.string
-    assert_includes output, "Rails REPL Server"
+    assert_includes output, "Rails Agent Server"
   end
 
   def test_dash_dash_help_shows_help
-    cli = RailsReplServer::CLI.new(["--help"])
+    cli = RailsAgentServer::CLI.new(["--help"])
     cli.run
 
     output = $stdout.string
-    assert_includes output, "Rails REPL Server"
+    assert_includes output, "Rails Agent Server"
   end
 
   def test_no_arguments_shows_help
-    cli = RailsReplServer::CLI.new([])
+    cli = RailsAgentServer::CLI.new([])
     cli.run
 
     output = $stdout.string
-    assert_includes output, "Rails REPL Server"
+    assert_includes output, "Rails Agent Server"
   end
 
   def test_status_command_when_not_running
-    cli = RailsReplServer::CLI.new(["status"])
-    server = RailsReplServer::Server.new(
+    cli = RailsAgentServer::CLI.new(["status"])
+    server = RailsAgentServer::Server.new(
       socket_path: @socket_path,
       pid_path: @pid_path,
       log_path: @log_path
@@ -75,8 +75,8 @@ class TestCLI < Minitest::Test
   end
 
   def test_stop_command_when_not_running
-    cli = RailsReplServer::CLI.new(["stop"])
-    server = RailsReplServer::Server.new(
+    cli = RailsAgentServer::CLI.new(["stop"])
+    server = RailsAgentServer::Server.new(
       socket_path: @socket_path,
       pid_path: @pid_path,
       log_path: @log_path
@@ -90,7 +90,7 @@ class TestCLI < Minitest::Test
   end
 
   def test_empty_code_shows_error_and_help
-    cli = RailsReplServer::CLI.new([""])
+    cli = RailsAgentServer::CLI.new([""])
 
     exit_code = nil
     begin
@@ -108,13 +108,13 @@ class TestCLI < Minitest::Test
   end
 
   def test_cli_initializes_with_default_server
-    cli = RailsReplServer::CLI.new([])
-    assert_kind_of RailsReplServer::Server, cli.server
+    cli = RailsAgentServer::CLI.new([])
+    assert_kind_of RailsAgentServer::Server, cli.server
   end
 
   def test_start_command
-    cli = RailsReplServer::CLI.new(["start"])
-    server = RailsReplServer::Server.new(
+    cli = RailsAgentServer::CLI.new(["start"])
+    server = RailsAgentServer::Server.new(
       socket_path: @socket_path,
       pid_path: @pid_path,
       log_path: @log_path
@@ -133,7 +133,7 @@ class TestCLI < Minitest::Test
   end
 
   def test_help_includes_examples
-    cli = RailsReplServer::CLI.new(["help"])
+    cli = RailsAgentServer::CLI.new(["help"])
     cli.run
 
     output = $stdout.string
@@ -143,7 +143,7 @@ class TestCLI < Minitest::Test
   end
 
   def test_help_includes_all_commands
-    cli = RailsReplServer::CLI.new(["help"])
+    cli = RailsAgentServer::CLI.new(["help"])
     cli.run
 
     output = $stdout.string
@@ -158,8 +158,8 @@ class TestCLI < Minitest::Test
     script_file = File.join(@temp_dir, "test_script.rb")
     File.write(script_file, "puts 'Hello from script'")
 
-    cli = RailsReplServer::CLI.new([script_file])
-    server = RailsReplServer::Server.new(
+    cli = RailsAgentServer::CLI.new([script_file])
+    server = RailsAgentServer::Server.new(
       socket_path: @socket_path,
       pid_path: @pid_path,
       log_path: @log_path
@@ -178,8 +178,8 @@ class TestCLI < Minitest::Test
   end
 
   def test_execute_code_with_string
-    cli = RailsReplServer::CLI.new(["1", "+", "1"])
-    server = RailsReplServer::Server.new(
+    cli = RailsAgentServer::CLI.new(["1", "+", "1"])
+    server = RailsAgentServer::Server.new(
       socket_path: @socket_path,
       pid_path: @pid_path,
       log_path: @log_path
@@ -199,8 +199,8 @@ class TestCLI < Minitest::Test
   end
 
   def test_connection_error_handling
-    cli = RailsReplServer::CLI.new(["User.count"])
-    server = RailsReplServer::Server.new(
+    cli = RailsAgentServer::CLI.new(["User.count"])
+    server = RailsAgentServer::Server.new(
       socket_path: @socket_path,
       pid_path: @pid_path,
       log_path: @log_path
@@ -225,8 +225,8 @@ class TestCLI < Minitest::Test
   end
 
   def test_generic_error_handling
-    cli = RailsReplServer::CLI.new(["User.count"])
-    server = RailsReplServer::Server.new(
+    cli = RailsAgentServer::CLI.new(["User.count"])
+    server = RailsAgentServer::Server.new(
       socket_path: @socket_path,
       pid_path: @pid_path,
       log_path: @log_path

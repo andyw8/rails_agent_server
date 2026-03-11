@@ -4,14 +4,14 @@ require "test_helper"
 require "tempfile"
 require "fileutils"
 
-class TestRailsReplServer < Minitest::Test
+class TestRailsAgentServer < Minitest::Test
   def setup
     @temp_dir = Dir.mktmpdir
-    @socket_path = File.join(@temp_dir, "test_rails_repl.sock")
-    @pid_path = File.join(@temp_dir, "test_rails_repl.pid")
-    @log_path = File.join(@temp_dir, "test_rails_repl.log")
+    @socket_path = File.join(@temp_dir, "test_rails_agent.sock")
+    @pid_path = File.join(@temp_dir, "test_rails_agent.pid")
+    @log_path = File.join(@temp_dir, "test_rails_agent.log")
 
-    @server = RailsReplServer::Server.new(
+    @server = RailsAgentServer::Server.new(
       socket_path: @socket_path,
       pid_path: @pid_path,
       log_path: @log_path
@@ -29,7 +29,7 @@ class TestRailsReplServer < Minitest::Test
   end
 
   def test_that_it_has_a_version_number
-    refute_nil ::RailsReplServer::VERSION
+    refute_nil ::RailsAgentServer::VERSION
   end
 
   def test_server_initialization
@@ -47,10 +47,10 @@ class TestRailsReplServer < Minitest::Test
   end
 
   def test_default_paths_when_not_in_rails
-    server = RailsReplServer::Server.new
-    assert_equal "/tmp/rails_repl.sock", server.socket_path
-    assert_equal "/tmp/rails_repl.pid", server.pid_path
-    assert_equal "/tmp/rails_repl.log", server.log_path
+    server = RailsAgentServer::Server.new
+    assert_equal "/tmp/rails_agent.sock", server.socket_path
+    assert_equal "/tmp/rails_agent.pid", server.pid_path
+    assert_equal "/tmp/rails_agent.log", server.log_path
   end
 
   def test_running_returns_false_with_stale_pid_file
@@ -88,7 +88,7 @@ class TestRailsReplServer < Minitest::Test
       assert_includes formatted, "StandardError"
       assert_includes formatted, "test error"
       # Backtrace should be included
-      assert_match(/test_rails_repl_server\.rb/, formatted)
+      assert_match(/test_rails_agent_server\.rb/, formatted)
     end
   end
 
@@ -159,8 +159,8 @@ class TestRailsReplServer < Minitest::Test
     Object.const_set(:Rails, rails_module)
 
     begin
-      server = RailsReplServer::Server.new
-      assert_equal "/fake/rails/root/tmp/rails_repl.sock", server.socket_path
+      server = RailsAgentServer::Server.new
+      assert_equal "/fake/rails/root/tmp/rails_agent.sock", server.socket_path
     ensure
       Object.send(:remove_const, :Rails)
     end
@@ -177,8 +177,8 @@ class TestRailsReplServer < Minitest::Test
     Object.const_set(:Rails, rails_module)
 
     begin
-      server = RailsReplServer::Server.new
-      assert_equal "/fake/rails/root/tmp/pids/rails_repl.pid", server.pid_path
+      server = RailsAgentServer::Server.new
+      assert_equal "/fake/rails/root/tmp/pids/rails_agent.pid", server.pid_path
     ensure
       Object.send(:remove_const, :Rails)
     end
@@ -195,8 +195,8 @@ class TestRailsReplServer < Minitest::Test
     Object.const_set(:Rails, rails_module)
 
     begin
-      server = RailsReplServer::Server.new
-      assert_equal "/fake/rails/root/log/rails_repl.log", server.log_path
+      server = RailsAgentServer::Server.new
+      assert_equal "/fake/rails/root/log/rails_agent.log", server.log_path
     ensure
       Object.send(:remove_const, :Rails)
     end

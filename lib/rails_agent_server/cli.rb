@@ -2,7 +2,7 @@
 
 require_relative "server"
 
-module RailsReplServer
+module RailsAgentServer
   class CLI
     attr_reader :server
 
@@ -21,7 +21,7 @@ module RailsReplServer
         server.status
       when "start"
         server.start
-        puts "Rails REPL server started"
+        puts "Rails agent server started"
       when "--help", "-h", "help", nil
         print_help
       else
@@ -47,7 +47,7 @@ module RailsReplServer
       begin
         puts server.execute(code)
       rescue Errno::ENOENT
-        $stderr.puts "Error: Could not connect to Rails REPL server"
+        $stderr.puts "Error: Could not connect to Rails agent server"
         exit 1
       rescue => e
         $stderr.puts "Error: #{e.message}"
@@ -57,41 +57,41 @@ module RailsReplServer
 
     def print_help
       puts <<~HELP
-        Rails REPL Server - A persistent Rails REPL that avoids boot overhead
+        Rails Agent Server - A persistent Rails server for AI agents
 
         Usage:
-          rails_repl 'User.count'              # Run a Ruby expression
-          rails_repl /path/to/script.rb        # Run a script file
-          rails_repl start                     # Start the server
-          rails_repl stop                      # Stop the server
-          rails_repl restart                   # Restart the server
-          rails_repl status                    # Check server status
-          rails_repl help                      # Show this help
+          rails_agent 'User.count'              # Run a Ruby expression
+          rails_agent /path/to/script.rb        # Run a script file
+          rails_agent start                     # Start the server
+          rails_agent stop                      # Stop the server
+          rails_agent restart                   # Restart the server
+          rails_agent status                    # Check server status
+          rails_agent help                      # Show this help
 
         The server auto-starts on first use if not already running.
 
         Examples:
-          rails_repl 'User.count'
-          rails_repl 'puts User.pluck(:email).join(", ")'
-          rails_repl 'ActiveRecord::Base.connection.tables'
-          rails_repl script.rb
+          rails_agent 'User.count'
+          rails_agent 'puts User.pluck(:email).join(", ")'
+          rails_agent 'ActiveRecord::Base.connection.tables'
+          rails_agent script.rb
 
         For Claude Code or AI agents, add this to your CLAUDE.md:
 
           ## Rails Console Access
 
-          This project uses rails_repl for fast Rails console access without boot overhead.
+          This project uses rails_agent for fast Rails console access without boot overhead.
 
           When you need to query the database or run Rails code:
-          - Use `rails_repl 'YourCode.here'` instead of `bin/rails runner`
+          - Use `rails_agent 'YourCode.here'` instead of `bin/rails runner`
           - First request auto-starts a persistent server (takes ~5 seconds)
           - Subsequent requests are instant (no Rails boot time)
-          - Server stays running in background until you run `rails_repl stop`
+          - Server stays running in background until you run `rails_agent stop`
 
           Examples:
-            rails_repl 'User.count'
-            rails_repl 'Post.where(published: true).count'
-            rails_repl 'User.find_by(email: "test@example.com")&.name'
+            rails_agent 'User.count'
+            rails_agent 'Post.where(published: true).count'
+            rails_agent 'User.find_by(email: "test@example.com")&.name'
       HELP
     end
   end

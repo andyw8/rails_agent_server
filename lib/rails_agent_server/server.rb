@@ -4,7 +4,7 @@ require "socket"
 require "fileutils"
 require "stringio"
 
-module RailsReplServer
+module RailsAgentServer
   class Server
     attr_reader :socket_path, :pid_path, :log_path
 
@@ -17,11 +17,11 @@ module RailsReplServer
     def start
       return if running?
 
-      puts "Starting Rails REPL server (this will take a few seconds)..."
+      puts "Starting Rails agent server (this will take a few seconds)..."
 
       pid = spawn(
-        RbConfig.ruby, "-r", "rails_repl_server/server",
-        "-e", "RailsReplServer::Server.new(socket_path: '#{socket_path}', pid_path: '#{pid_path}', log_path: '#{log_path}').run",
+        RbConfig.ruby, "-r", "rails_agent_server/server",
+        "-e", "RailsAgentServer::Server.new(socket_path: '#{socket_path}', pid_path: '#{pid_path}', log_path: '#{log_path}').run",
         out: log_path, err: log_path
       )
       Process.detach(pid)
@@ -34,13 +34,13 @@ module RailsReplServer
         pid = File.read(pid_path).strip.to_i
         begin
           Process.kill("TERM", pid)
-          puts "Stopped Rails REPL server (PID: #{pid})"
+          puts "Stopped Rails agent server (PID: #{pid})"
         rescue Errno::ESRCH
-          puts "Rails REPL server is not running (stale PID file)"
+          puts "Rails agent server is not running (stale PID file)"
           cleanup_files
         end
       else
-        puts "Rails REPL server is not running"
+        puts "Rails agent server is not running"
       end
     end
 
@@ -49,16 +49,16 @@ module RailsReplServer
       cleanup_files
       sleep 0.5
       start
-      puts "Rails REPL server restarted"
+      puts "Rails agent server restarted"
     end
 
     def status
       if running?
         pid = File.read(pid_path).strip
-        puts "Rails REPL server is running (PID: #{pid})"
+        puts "Rails agent server is running (PID: #{pid})"
         true
       else
-        puts "Rails REPL server is not running"
+        puts "Rails agent server is not running"
         false
       end
     end
@@ -80,7 +80,7 @@ module RailsReplServer
       server = UNIXServer.new(socket_path)
       File.write(pid_path, Process.pid.to_s)
 
-      $stdout.puts "Rails REPL server listening on #{socket_path} (PID: #{Process.pid})"
+      $stdout.puts "Rails agent server listening on #{socket_path} (PID: #{Process.pid})"
 
       setup_signal_handlers
       at_exit { cleanup_files }
@@ -111,25 +111,25 @@ module RailsReplServer
 
     def default_socket_path
       if defined?(Rails) && Rails.root
-        Rails.root.join("tmp", "rails_repl.sock").to_s
+        Rails.root.join("tmp", "rails_agent.sock").to_s
       else
-        "/tmp/rails_repl.sock"
+        "/tmp/rails_agent.sock"
       end
     end
 
     def default_pid_path
       if defined?(Rails) && Rails.root
-        Rails.root.join("tmp", "pids", "rails_repl.pid").to_s
+        Rails.root.join("tmp", "pids", "rails_agent.pid").to_s
       else
-        "/tmp/rails_repl.pid"
+        "/tmp/rails_agent.pid"
       end
     end
 
     def default_log_path
       if defined?(Rails) && Rails.root
-        Rails.root.join("log", "rails_repl.log").to_s
+        Rails.root.join("log", "rails_agent.log").to_s
       else
-        "/tmp/rails_repl.log"
+        "/tmp/rails_agent.log"
       end
     end
 
@@ -139,7 +139,7 @@ module RailsReplServer
         sleep 0.5
       end
 
-      abort "Timed out waiting for Rails REPL server to start. Check #{log_path}"
+      abort "Timed out waiting for Rails agent server to start. Check #{log_path}"
     end
 
     def cleanup_files
