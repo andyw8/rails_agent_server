@@ -19,7 +19,7 @@ AI agents can't easily interact with `bin/rails console` because:
 
 Rails Agent Server provides a simple request/response interface over Unix sockets, making it trivial for AI agents to execute code and get clean results.
 
-### vs. Spring
+### Why Not Spring?
 
 Spring is Rails' official application preloader and is a viable alternative for this use case. However, some projects prefer to avoid Spring for various reasons:
 
@@ -28,7 +28,7 @@ Spring is Rails' official application preloader and is a viable alternative for 
 
 If Spring works well for your project, you can use `bin/spring rails runner` instead. Rails Agent Server is for teams that prefer an alternative approach or have disabled Spring.
 
-### vs. MCP (Model Context Protocol)
+### Why Not MCP (Model Context Protocol)?
 
 MCP servers provide a structured way for AI agents to interact with systems through defined tools and resources. While MCP is excellent for complex, multi-step workflows and standardized interfaces, Rails Agent Server is preferable when:
 
