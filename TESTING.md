@@ -72,10 +72,17 @@ cd test/dummy
 bundle exec ruby -I../../lib:../../test ../../test/test_dummy_integration.rb
 ```
 
-**Note:** Integration tests are skipped in CI because they:
-- Fork background processes (flaky in GitHub Actions)
-- Require full Rails boot (slow and environment-dependent)
-- Test socket/TTY behavior (unreliable in containerized CI)
+**Note:** Integration tests are skipped in CI because they were flaky during initial setup. The flakiness stems from:
+- **Timing sensitivity** - Tests poll for file existence with short timeouts that can fail on slow CI runners
+- **Process forking** - Background processes via `fork` and `spawn` can behave differently in GitHub Actions
+- **Rails boot time** - Full Rails environment loading is slow and can exceed polling timeouts
+- **Maintenance cost** - Debugging flaky CI tests outweighed the additional confidence they provide
+
+These tests *could* be enabled in CI with improvements like:
+- Longer timeouts and wait times when `ENV['CI']` is set
+- More robust waiting logic (e.g., exponential backoff)
+- Retry mechanisms for transient failures
+- Dedicated CI job with allowed failures
 
 ## CI Configuration
 
@@ -84,13 +91,18 @@ The CI workflow (`.github/workflows/main.yml`) runs:
 1. `bundle exec rake test` - Unit tests only
 2. `bundle exec rake standard` - Code linting
 
-The Rakefile explicitly sets `test_globs` to only include unit tests, preventing integration tests from running automatically.
+The Rakefile explicitly sets `test_globs` to only include unit tests. This is a pragmatic choice:
+- Unit tests provide good coverage of core logic
+- They run in ~10ms vs seconds for integration tests
+- They're deterministic and never flaky
+- Integration tests can be run manually before releases
 
 ## Test Philosophy
 
 - **Unit tests** should be fast, deterministic, and run everywhere (local, CI, different OS)
-- **Integration tests** verify real-world behavior but may be environment-specific
+- **Integration tests** verify real-world behavior but trade speed and reliability for realism
 - All tests use standard Minitest without extra dependencies
+- CI runs unit tests; integration tests are for local verification and releases
 
 ## Troubleshooting
 
@@ -108,11 +120,43 @@ Integration tests require:
 - Ability to fork processes (won't work on Windows)
 - Write access to temp directories
 - No firewall blocking Unix sockets
+- A working Rails environment for dummy app tests
 
-If they fail, focus on unit tests which provide good coverage of the core functionality.
+Common failure modes:
+- **Timeout waiting for socket** - Server took too long to start, increase wait time
+- **Address already in use** - Previous test didn't clean up, check for stale processes
+- **Rails not found** - Dummy app needs `bundle install` in `test/dummy`
+
+If they consistently fail, focus on unit tests which provide 80%+ coverage of core functionality.
 
 ## Adding New Tests
 
 - **Add unit tests** for new functionality in the Server or CLI classes
-- **Keep mocks simple** - avoid calling test assertions inside mocked methods
+- **Keep mocks simple** - avoid calling test assertions inside mocked methods (they can cause hangs)
 - **Integration tests are optional** - they verify real behavior but aren't required for CI
+- **Consider CI-friendliness** - if adding integration tests, make timeouts configurable for CI environments
+
+## Re-enabling Integration Tests in CI (Future Work)
+
+If you want to run integration tests in CI:
+
+1. **Make timeouts CI-aware**:
+   ```ruby
+   wait_iterations = ENV['CI'] ? 100 : 30  # 10s vs 3s
+   ```
+
+2. **Add retry logic**:
+   ```ruby
+   Minitest::Retry.use!(retry_count: 3, exceptions_to_retry: [Minitest::Assertion])
+   ```
+
+3. **Create separate CI job**:
+   ```yaml
+   integration-tests:
+     runs-on: ubuntu-latest
+     continue-on-error: true  # Don't block merges on flaky tests
+   ```
+
+4. **Use Docker for consistency**:
+   - Eliminates environment differences
+   - Predictable performance characteristics
