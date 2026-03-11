@@ -87,6 +87,10 @@ Examples:
   rails_agent_server 'puts Post.where(published: true).count'
   rails_agent_server 'puts User.find_by(email: "test@example.com")&.name'
 
+Reloading code changes:
+- Most code changes: stop the server with `rails_agent_server stop` (it will auto-start on next request)
+- For quick iteration, you may need to stop/start between code changes
+
 Note: Use `bundle exec rails_agent_server` if the gem is in your Gemfile, or just `rails_agent_server` if installed globally.
 ```
 
@@ -109,7 +113,6 @@ rails_agent_server /path/to/script.rb
 # Server management
 rails_agent_server status                    # Check if server is running
 rails_agent_server stop                      # Stop the background server
-rails_agent_server restart                   # Restart the background server
 ```
 
 ### Examples
@@ -164,21 +167,9 @@ If not in a Rails directory, files are created in `/tmp/`.
 - **Subsequent requests**: Almost instant (no boot overhead)
 - **Memory**: One Rails process running in background (~200-500MB depending on your app)
 
-## When to Restart
-
-You should restart the server when:
-- You've changed model files or schema
-- You've updated initializers
-- You've modified environment configuration
-- The server is returning stale data
-
-```bash
-rails_agent_server restart
-```
-
 ## Limitations
 
-- The server may need to be restarted to pick up some code changes
+- Code changes require stopping the server and letting it auto-start on next request
 - Only one server runs per Rails application (shared socket file)
 - Requires Unix sockets (macOS, Linux, WSL)
 

@@ -15,8 +15,6 @@ module RailsAgentServer
       case @argv[0]
       when "stop"
         server.stop
-      when "restart"
-        server.restart
       when "status"
         server.status
       when "--help", "-h", nil
@@ -60,7 +58,6 @@ module RailsAgentServer
           rails_agent_server 'puts User.count'         # Run a Ruby expression
           rails_agent_server /path/to/script.rb        # Run a script file
           rails_agent_server stop                      # Stop the server
-          rails_agent_server restart                   # Restart the server
           rails_agent_server status                    # Check server status
 
         The server auto-starts on first use if not already running.
@@ -80,13 +77,17 @@ module RailsAgentServer
           When you need to query the database or run Rails code:
           - Use `rails_agent_server 'YourCode.here'` instead of `bin/rails runner`
           - First request auto-starts a persistent server (takes ~5 seconds)
-          - Subsequent requests are instant (no Rails boot time)
+          - Subsequent requests are almost instant (no Rails boot time)
           - Server stays running in background until you run `rails_agent_server stop`
 
           Examples:
             rails_agent_server 'puts User.count'
             rails_agent_server 'puts Post.where(published: true).count'
             rails_agent_server 'puts User.find_by(email: "test@example.com")&.name'
+
+          Reloading code changes:
+          - Most code changes: stop the server with `rails_agent_server stop` (it will auto-start on next request)
+          - For quick iteration, you may need to stop/start between code changes
       HELP
     end
   end

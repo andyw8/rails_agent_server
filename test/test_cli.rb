@@ -118,7 +118,6 @@ class TestCLI < Minitest::Test
 
     output = $stdout.string
     assert_includes output, "stop"
-    assert_includes output, "restart"
     assert_includes output, "status"
   end
 
