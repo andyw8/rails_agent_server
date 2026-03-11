@@ -167,13 +167,6 @@ If not in a Rails directory, files are created in `/tmp/`.
 - **Subsequent requests**: Almost instant (no boot overhead)
 - **Memory**: One Rails process running in background (~200-500MB depending on your app)
 
-## Limitations
-
-- Most code changes can be reloaded with `Rails.application.reloader.reload!`
-- Initializer changes require stopping the server (`rails_agent_server stop`)
-- Only one server runs per Rails application (shared socket file)
-- Requires Unix sockets (macOS, Linux, WSL)
-
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
