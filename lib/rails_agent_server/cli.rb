@@ -86,8 +86,8 @@ module RailsAgentServer
             rails_agent_server 'puts User.find_by(email: "test@example.com")&.name'
 
           Reloading code changes:
-          - Most code changes: stop the server with `rails_agent_server stop` (it will auto-start on next request)
-          - For quick iteration, you may need to stop/start between code changes
+          - For most changes: `rails_agent_server 'Rails.application.reloader.reload!'`
+          - For initializer changes: stop the server with `rails_agent_server stop` (it will auto-start on next request)
       HELP
     end
   end
