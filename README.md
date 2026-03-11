@@ -1,6 +1,6 @@
 # Rails Agent Server
 
-A persistent Rails server for AI agents that avoids boot overhead for repeated queries. Perfect for AI agents like Claude Code that need fast Rails console access without waiting for Rails to boot on every request.
+A persistent Rails server for AI agents that avoids boot overhead for repeated queries. Intended for AI agents like Claude Code that need fast Rails console access without waiting for Rails to boot on every request.
 
 ## Why This Gem?
 
@@ -190,7 +190,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/andyw8
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Credits
-
-Created by [Andy Waite](https://github.com/andyw8) to improve the experience of using AI coding assistants with Rails applications.
