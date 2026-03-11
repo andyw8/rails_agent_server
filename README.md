@@ -4,7 +4,7 @@ A persistent Rails REPL server that avoids boot overhead for repeated queries. P
 
 ## Why This Gem?
 
-When using AI coding assistants or automation tools with Rails applications, you often need to run many small queries to understand the schema, query data, or test code. Using `bin/rails runner` for each query means booting Rails every time, which can take 5-10 seconds per query.
+When using AI coding assistants or automation tools with Rails applications, you often need to run many small queries to understand the schema, query data, or test code. Using `bin/rails runner` for each query means booting Rails every time, which can typically take 5-10 seconds per query.
 
 Rails REPL Server starts a persistent background server that keeps Rails loaded in memory. The first request takes the normal Rails boot time, but subsequent requests are instant.
 
@@ -14,8 +14,6 @@ Spring is Rails' official application preloader and is a viable alternative for 
 
 - **Simplicity**: Spring can sometimes cause confusion with stale code or require manual intervention (`spring stop`)
 - **Compatibility**: Some projects have experienced issues with Spring in certain environments or with specific gems
-- **Control**: Rails REPL Server provides explicit start/stop commands and clear visibility into server status
-- **CI/CD**: Many projects disable Spring in CI environments and prefer consistent behavior across all environments
 
 If Spring works well for your project, you can use `bin/spring rails runner` instead. Rails REPL Server is for teams that prefer an alternative approach or have disabled Spring.
 
