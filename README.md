@@ -183,6 +183,10 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 To install this gem onto your local machine, run `bundle exec rake install`.
 
+### Testing
+
+The test suite includes unit tests (fast, run in CI) and integration tests (slower, require process forking). By default, `rake test` runs only unit tests. See [TESTING.md](TESTING.md) for details on running integration tests locally.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/andyw8/rails_agent_server.
