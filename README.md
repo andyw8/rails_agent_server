@@ -24,6 +24,8 @@ MCP servers provide a structured way for AI agents to interact with systems thro
 - **Simplicity**: You just need to run Rails code quickly without defining MCP tools and schemas
 - **Flexibility**: AI agents can execute arbitrary Rails code without being limited to predefined tool operations
 - **Setup**: No need to configure MCP server definitions, transport layers, or client-server communication
+- **Performance**: Direct command execution is faster than MCP's request/response protocol overhead
+- **Token efficiency**: MCP can consume many tokens for structured tool schemas and responses
 - **Existing workflows**: Works with agents that already know how to run shell commands
 
 Rails REPL Server is a lightweight alternative that lets AI agents treat your Rails app like a fast REPL, while MCP is better suited for building formalized integrations with specific capabilities.
