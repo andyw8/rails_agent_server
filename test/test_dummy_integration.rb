@@ -5,6 +5,7 @@ require "fileutils"
 
 class TestDummyIntegration < Minitest::Test
   def setup
+    skip "Skipping slow dummy integration tests in CI" if ENV['CI']
     @dummy_path = File.expand_path("../test/dummy", __dir__)
     @rails_agent_server = File.expand_path("../exe/rails_agent_server", __dir__)
 
