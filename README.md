@@ -71,15 +71,15 @@ Add this section to your project's `CLAUDE.md` or equivalent:
 This project uses `rails_agent_server` for fast Rails runner access without boot overhead.
 
 When you need to query the database or run Rails code:
-- Use `rails_agent_server 'YourCode.here'` instead of `bin/rails runner`
+- Use `bundle exec rails_agent_server 'YourCode.here'` instead of `bin/rails runner`
 - First request auto-starts a persistent server (takes ~5 seconds)
 - Subsequent requests are instant (no Rails boot time)
-- Server stays running in background until you run `rails_agent_server stop`
+- Server stays running in background until you run `bundle exec rails_agent_server stop`
 
 Examples:
-  rails_agent_server 'User.count'
-  rails_agent_server 'Post.where(published: true).count'
-  rails_agent_server 'User.find_by(email: "test@example.com")&.name'
+  bundle exec rails_agent_server 'User.count'
+  bundle exec rails_agent_server 'Post.where(published: true).count'
+  bundle exec rails_agent_server 'User.find_by(email: "test@example.com")&.name'
 ```
 
 ## Usage
