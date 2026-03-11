@@ -67,8 +67,6 @@ And then execute:
 bundle install
 ```
 
-
-
 ## Agent Setup
 
 Add this section to your project's `CLAUDE.md` or equivalent:
