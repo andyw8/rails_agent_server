@@ -127,7 +127,6 @@ rails_agent_server 'puts ActiveRecord::Base.connection.tables'
 rails_agent_server 'puts User.column_names'
 
 # Complex operations
-rails_agent_server 'puts User.group(:status).count'
 rails_agent_server 'Rails.cache.clear; puts "Cache cleared"'
 ```
 
