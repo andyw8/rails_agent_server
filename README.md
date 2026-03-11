@@ -17,6 +17,17 @@ Spring is Rails' official application preloader and is a viable alternative for 
 
 If Spring works well for your project, you can use `bin/spring rails runner` instead. Rails REPL Server is for teams that prefer an alternative approach or have disabled Spring.
 
+### vs. MCP (Model Context Protocol)
+
+MCP servers provide a structured way for AI agents to interact with systems through defined tools and resources. While MCP is excellent for complex, multi-step workflows and standardized interfaces, Rails REPL Server is preferable when:
+
+- **Simplicity**: You just need to run Rails code quickly without defining MCP tools and schemas
+- **Flexibility**: AI agents can execute arbitrary Rails code without being limited to predefined tool operations
+- **Setup**: No need to configure MCP server definitions, transport layers, or client-server communication
+- **Existing workflows**: Works with agents that already know how to run shell commands
+
+Rails REPL Server is a lightweight alternative that lets AI agents treat your Rails app like a fast REPL, while MCP is better suited for building formalized integrations with specific capabilities.
+
 ## Installation
 
 Add this line to your application's Gemfile:
