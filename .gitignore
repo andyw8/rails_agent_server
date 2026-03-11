@@ -6,6 +6,7 @@
 /pkg/
 /spec/reports/
 /tmp/
+/*.gem
 
 # Ignore generated files in dummy app
 /test/dummy/log/
