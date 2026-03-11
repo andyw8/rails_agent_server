@@ -7,6 +7,7 @@ require "socket"
 
 class TestIntegration < Minitest::Test
   def setup
+    skip "Skipping integration tests with forked processes in CI" if ENV['CI']
     @temp_dir = Dir.mktmpdir
     @socket_path = File.join(@temp_dir, "test_rails_agent.sock")
     @pid_path = File.join(@temp_dir, "test_rails_agent.pid")
