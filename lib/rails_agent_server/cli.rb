@@ -57,7 +57,7 @@ module RailsAgentServer
         Rails Agent Server - A persistent Rails server for AI agents
 
         Usage:
-          rails_agent_server 'User.count'              # Run a Ruby expression
+          rails_agent_server 'puts User.count'         # Run a Ruby expression
           rails_agent_server /path/to/script.rb        # Run a script file
           rails_agent_server stop                      # Stop the server
           rails_agent_server restart                   # Restart the server
@@ -66,9 +66,9 @@ module RailsAgentServer
         The server auto-starts on first use if not already running.
 
         Examples:
-          rails_agent_server 'User.count'
+          rails_agent_server 'puts User.count'
           rails_agent_server 'puts User.pluck(:email).join(", ")'
-          rails_agent_server 'ActiveRecord::Base.connection.tables'
+          rails_agent_server 'puts ActiveRecord::Base.connection.tables'
           rails_agent_server script.rb
 
         For Claude Code or AI agents, add this to your CLAUDE.md:
@@ -84,9 +84,9 @@ module RailsAgentServer
           - Server stays running in background until you run `rails_agent_server stop`
 
           Examples:
-            rails_agent_server 'User.count'
-            rails_agent_server 'Post.where(published: true).count'
-            rails_agent_server 'User.find_by(email: "test@example.com")&.name'
+            rails_agent_server 'puts User.count'
+            rails_agent_server 'puts Post.where(published: true).count'
+            rails_agent_server 'puts User.find_by(email: "test@example.com")&.name'
       HELP
     end
   end

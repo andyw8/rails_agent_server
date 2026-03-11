@@ -85,9 +85,9 @@ When you need to query the database or run Rails code:
 - Server stays running in background until you run `rails_agent_server stop`
 
 Examples:
-  rails_agent_server 'User.count'
-  rails_agent_server 'Post.where(published: true).count'
-  rails_agent_server 'User.find_by(email: "test@example.com")&.name'
+  rails_agent_server 'puts User.count'
+  rails_agent_server 'puts Post.where(published: true).count'
+  rails_agent_server 'puts User.find_by(email: "test@example.com")&.name'
 
 Note: Use `bundle exec rails_agent_server` if the gem is in your Gemfile, or just `rails_agent_server` if installed globally.
 ```
@@ -100,7 +100,7 @@ These commands are designed to be used by AI agents (like Claude Code) or automa
 
 ```bash
 # Run a Ruby expression (auto-starts server if needed)
-rails_agent_server 'User.count'
+rails_agent_server 'puts User.count'
 
 # Run code that prints output
 rails_agent_server 'puts User.pluck(:email).join(", ")'
@@ -118,17 +118,17 @@ rails_agent_server restart                   # Restart the background server
 
 ```bash
 # Database queries
-rails_agent_server 'User.count'
-rails_agent_server 'Post.where(published: true).pluck(:title)'
-rails_agent_server 'User.find_by(email: "test@example.com")&.name'
+rails_agent_server 'puts User.count'
+rails_agent_server 'puts Post.where(published: true).pluck(:title)'
+rails_agent_server 'puts User.find_by(email: "test@example.com")&.name'
 
 # Inspect schema
-rails_agent_server 'ActiveRecord::Base.connection.tables'
-rails_agent_server 'User.column_names'
+rails_agent_server 'puts ActiveRecord::Base.connection.tables'
+rails_agent_server 'puts User.column_names'
 
 # Complex operations
-rails_agent_server 'User.group(:status).count'
-rails_agent_server 'Rails.cache.clear; "Cache cleared"'
+rails_agent_server 'puts User.group(:status).count'
+rails_agent_server 'Rails.cache.clear; puts "Cache cleared"'
 ```
 
 ## How It Works

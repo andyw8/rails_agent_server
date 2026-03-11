@@ -234,8 +234,6 @@ module RailsAgentServer
 
       if error
         response << error
-      elsif printed_output.empty?
-        response << result.inspect
       end
 
       response

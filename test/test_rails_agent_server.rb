@@ -95,7 +95,7 @@ class TestRailsAgentServer < Minitest::Test
   def test_build_response_with_result_only
     server = @server
     response = server.send(:build_response, "", 42, nil)
-    assert_equal "42", response
+    assert_equal "", response
   end
 
   def test_build_response_with_printed_output_only
