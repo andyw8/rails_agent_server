@@ -173,7 +173,7 @@ rails_agent restart
 
 ## Limitations
 
-- The server must be restarted to pick up code changes
+- The server may need to be restarted to pick up some code changes
 - Only one server runs per Rails application (shared socket file)
 - Requires Unix sockets (macOS, Linux, WSL)
 
