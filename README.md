@@ -214,6 +214,7 @@ rails_agent_server restart
 
 ## Limitations
 
+- **Single agent only**: The server processes one request at a time. Multiple agents or concurrent requests will be unpredictable due to shared state in the persistent session. Spring's fork-based approach handles concurrent requests safely by isolating each in its own process.
 - The server may need to be restarted to pick up some code changes
 - Only one server runs per Rails application (shared socket file)
 - Requires Unix sockets (macOS, Linux, WSL)
