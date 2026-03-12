@@ -28,6 +28,42 @@ Spring is Rails' official application preloader and is a viable alternative for 
 
 If Spring works well for your project, you can use `bin/spring rails runner` instead. Rails Agent Server is for teams that prefer an alternative approach or have disabled Spring.
 
+## How It Works
+
+Rails Agent Server uses a persistent background process that keeps Rails loaded and accepts code over a Unix socket:
+
+```ruby
+# Server process (runs in background)
+def run
+  load_rails_environment        # Boot Rails once
+  create_unix_socket           # Create socket file for communication
+  
+  loop do
+    client = accept_connection  # Wait for code to execute
+    code = client.read          # Read the code string
+    output = capture_output do  # Capture stdout/stderr
+      eval(code, TOPLEVEL_BINDING)  # Execute in persistent session
+    end
+    client.write(output)        # Send output back
+    client.close
+  end
+end
+
+# Client (called by rails_agent_server command)
+def execute(code)
+  start_server unless server_running?  # Auto-start if needed
+  
+  socket = connect_to_server
+  socket.write(code)              # Send code to evaluate
+  response = socket.read          # Get output back
+  socket.close
+  
+  puts response                   # Display to user
+end
+```
+
+The key insight: code runs in `TOPLEVEL_BINDING` of a persistent process, so variables and state carry over between requests, just like in `rails console`.
+
 ### Why Not MCP (Model Context Protocol)?
 
 MCP servers provide a structured way for AI agents to interact with systems through defined tools and resources. While MCP is excellent for complex, multi-step workflows and standardized interfaces, Rails Agent Server is preferable when:
