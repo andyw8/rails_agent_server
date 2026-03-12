@@ -21,12 +21,17 @@ Rails Agent Server provides a simple request/response interface over Unix socket
 
 ### Why Not Spring?
 
-Spring is Rails' official application preloader and is a viable alternative for this use case. However, some projects prefer to avoid Spring for various reasons:
+Spring is Rails' official application preloader, but it's designed for different use cases:
 
-- **Simplicity**: Spring can sometimes cause confusion with stale code or require manual intervention (`spring stop`)
-- **Compatibility**: Some projects have experienced issues with Spring in certain environments or with specific gems
+- **Spring**: Preloads Rails for *interactive commands* (console, rake, tests) - starts a fresh process for each `rails runner` invocation
+- **Rails Agent Server**: Keeps a *single persistent session* running - reuses the same process across requests, maintaining state
 
-If Spring works well for your project, you can use `bin/spring rails runner` instead. Rails Agent Server is for teams that prefer an alternative approach or have disabled Spring.
+Key differences:
+- Spring's `bin/spring rails runner` starts a new isolated process each time (stateless)
+- Rails Agent Server runs code in a persistent session where variables carry over between requests (stateful, like console)
+- Spring requires `spring stop` to clear its cache; Rails Agent Server uses `Rails.application.reloader.reload!` for code changes
+
+If you need stateless, isolated execution, use `bin/spring rails runner`. If you need stateful, persistent session access for AI agents, use Rails Agent Server.
 
 ### Why Not MCP (Model Context Protocol)?
 
