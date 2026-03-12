@@ -21,12 +21,51 @@ Rails Agent Server provides a simple request/response interface over Unix socket
 
 ### Why Not Spring?
 
-Spring is Rails' official application preloader and is a viable alternative for this use case. However, some projects prefer to avoid Spring for various reasons:
+Spring is Rails' official application preloader, but it's designed for different use cases.
 
-- **Simplicity**: Spring can sometimes cause confusion with stale code or require manual intervention (`spring stop`)
-- **Compatibility**: Some projects have experienced issues with Spring in certain environments or with specific gems
+#### How They Work
 
-If Spring works well for your project, you can use `bin/spring rails runner` instead. Rails Agent Server is for teams that prefer an alternative approach or have disabled Spring.
+**Spring** keeps a preloaded Rails application in memory and uses `fork()` to create a new process for each command. When you run `bin/spring rails runner`, it forks the preloaded process, runs your code in isolation, and exits. Each invocation is **stateless** with a clean slate. This also means Spring can safely handle **concurrent requests** from multiple agents or parallel processes.
+
+**Rails Agent Server** boots Rails once and keeps a single persistent session running. It accepts code over a Unix socket and evaluates it in the same long-running process. Variables and state persist between requests - like `rails console`, not `rails runner`. This means it's designed for **single agent use** - concurrent requests would share state unpredictably.
+
+Both solve the "Rails is slow to boot" problem. Spring forks a fresh process for each command while Rails Agent Server runs code in a single persistent session.
+
+#### How Rails Agent Server Works (Pseudocode)
+
+```ruby
+# Server process (runs in background)
+def run
+  load_rails_environment        # Boot Rails once
+  create_unix_socket           # Create socket file for communication
+  
+  loop do
+    client = accept_connection  # Wait for code to execute
+    code = client.read          # Read the code string
+    output = capture_output do  # Capture stdout/stderr
+      eval(code, TOPLEVEL_BINDING)  # Execute in persistent session
+    end
+    client.write(output)        # Send output back
+    client.close
+  end
+end
+
+# Client (called by rails_agent_server command)
+def execute(code)
+  start_server unless server_running?  # Auto-start if needed
+  
+  socket = connect_to_server
+  socket.write(code)              # Send code to evaluate
+  response = socket.read          # Get output back
+  socket.close
+  
+  puts response                   # Display to user
+end
+```
+
+The key insight: code runs in `TOPLEVEL_BINDING` of a persistent process, so variables and state carry over between requests, just like in `rails console`.
+
+Spring is a viable option if it works well for your team. Rails Agent Server is for teams that prefer to not use Spring.
 
 ### Why Not MCP (Model Context Protocol)?
 
@@ -178,6 +217,7 @@ rails_agent_server restart
 
 ## Limitations
 
+- **Single agent only**: The server processes one request at a time. Multiple agents or concurrent requests will be unpredictable due to shared state in the persistent session. Spring's fork-based approach handles concurrent requests safely by isolating each in its own process.
 - The server may need to be restarted to pick up some code changes
 - Only one server runs per Rails application (shared socket file)
 - Requires Unix sockets (macOS, Linux, WSL)
