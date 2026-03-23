@@ -115,6 +115,8 @@ module RailsAgentServer
     def default_socket_path
       if defined?(Rails) && Rails.root
         Rails.root.join("tmp", "rails_agent_server.sock").to_s
+      elsif (root = find_rails_root)
+        File.join(root, "tmp", "rails_agent_server.sock")
       else
         "/tmp/rails_agent_server.sock"
       end
@@ -123,6 +125,8 @@ module RailsAgentServer
     def default_pid_path
       if defined?(Rails) && Rails.root
         Rails.root.join("tmp", "pids", "rails_agent_server.pid").to_s
+      elsif (root = find_rails_root)
+        File.join(root, "tmp", "pids", "rails_agent_server.pid")
       else
         "/tmp/rails_agent_server.pid"
       end
@@ -131,6 +135,8 @@ module RailsAgentServer
     def default_log_path
       if defined?(Rails) && Rails.root
         Rails.root.join("log", "rails_agent_server.log").to_s
+      elsif (root = find_rails_root)
+        File.join(root, "log", "rails_agent_server.log")
       else
         "/tmp/rails_agent_server.log"
       end

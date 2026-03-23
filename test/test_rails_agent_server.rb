@@ -47,10 +47,37 @@ class TestRailsAgentServer < Minitest::Test
   end
 
   def test_default_paths_when_not_in_rails
-    server = RailsAgentServer::Server.new
-    assert_equal "/tmp/rails_agent_server.sock", server.socket_path
-    assert_equal "/tmp/rails_agent_server.pid", server.pid_path
-    assert_equal "/tmp/rails_agent_server.log", server.log_path
+    # Save current dir and change to a non-Rails directory
+    original_dir = Dir.pwd
+    begin
+      Dir.chdir(@temp_dir)
+      server = RailsAgentServer::Server.new
+      assert_equal "/tmp/rails_agent_server.sock", server.socket_path
+      assert_equal "/tmp/rails_agent_server.pid", server.pid_path
+      assert_equal "/tmp/rails_agent_server.log", server.log_path
+    ensure
+      Dir.chdir(original_dir)
+    end
+  end
+
+  def test_default_paths_use_rails_root_from_cwd_when_rails_not_loaded
+    # Create a fake Rails app structure
+    fake_root = File.realpath(File.join(@temp_dir, "my_app").tap { |d| FileUtils.mkdir_p(d) })
+    FileUtils.mkdir_p(File.join(fake_root, "config"))
+    File.write(File.join(fake_root, "config", "environment.rb"), "")
+    FileUtils.mkdir_p(File.join(fake_root, "tmp", "pids"))
+    FileUtils.mkdir_p(File.join(fake_root, "log"))
+
+    original_dir = Dir.pwd
+    begin
+      Dir.chdir(fake_root)
+      server = RailsAgentServer::Server.new
+      assert_equal File.join(fake_root, "tmp", "rails_agent_server.sock"), server.socket_path
+      assert_equal File.join(fake_root, "tmp", "pids", "rails_agent_server.pid"), server.pid_path
+      assert_equal File.join(fake_root, "log", "rails_agent_server.log"), server.log_path
+    ensure
+      Dir.chdir(original_dir)
+    end
   end
 
   def test_running_returns_false_with_stale_pid_file
